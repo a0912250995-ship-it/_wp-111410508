@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>綜合問卷表單</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f5f5f5;
+            margin: 20px;
+        }
+        h2 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, textarea {
+            margin-top: 5px;
+            padding: 5px;
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid gray;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        .btn {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>🔐 登入表單</h2>
+<form>
+    <label>帳號：</label>
+    <input type="text" name="username" placeholder="請輸入帳號">
+
+    <label>密碼：</label>
+    <input type="password" name="password" placeholder="請輸入密碼">
+</form>
+
+<h2>📋 基本資料填寫</h2>
+<form>
+
+    <label>姓名：</label>
+    <input type="text" name="name">
+
+    <label>Email：</label>
+    <input type="email" name="email">
+
+    <label>電話：</label>
+    <input type="tel" name="phone">
+
+    <label>出生日期：</label>
+    <input type="date" name="birthday">
+
+    <label>性別：</label>
+    <input type="radio" name="gender" value="male"> 男
+    <input type="radio" name="gender" value="female"> 女
+    <input type="radio" name="gender" value="other"> 其他
+
+    <label>興趣（可複選）：</label>
+    <input type="checkbox" name="hobby" value="music"> 音樂
+    <input type="checkbox" name="hobby" value="sports"> 運動
+    <input type="checkbox" name="hobby" value="game"> 遊戲
+    <input type="checkbox" name="hobby" value="reading"> 閱讀
+
+    <label>職業：</label>
+    <select name="job">
+        <option>學生</option>
+        <option>上班族</option>
+        <option>自由業</option>
+        <option>其他</option>
+    </select>
+
+    <label>喜歡的顏色：</label>
+    <input type="color" name="color">
+
+    <label>上傳檔案：</label>
+    <input type="file" name="file">
+
+    <label>滿意度（1~10）：</label>
+    <input type="range" min="1" max="10">
+
+    <label>留言：</label>
+    <textarea rows="4"></textarea>
+
+</form>
+
+<h2>📊 表格調查表單</h2>
+<form>
+
+<table>
+    <tr>
+        <th>項目</th>
+        <th>非常滿意</th>
+        <th>滿意</th>
+        <th>普通</th>
+        <th>不滿意</th>
+    </tr>
+
+    <tr>
+        <td>服務品質</td>
+        <td><input type="radio" name="q1"></td>
+        <td><input type="radio" name="q1"></td>
+        <td><input type="radio" name="q1"></td>
+        <td><input type="radio" name="q1"></td>
+    </tr>
+
+    <tr>
+        <td>環境整潔</td>
+        <td><input type="radio" name="q2"></td>
+        <td><input type="radio" name="q2"></td>
+        <td><input type="radio" name="q2"></td>
+        <td><input type="radio" name="q2"></td>
+    </tr>
+
+    <tr>
+        <td>價格合理</td>
+        <td><input type="radio" name="q3"></td>
+        <td><input type="radio" name="q3"></td>
+        <td><input type="radio" name="q3"></td>
+        <td><input type="radio" name="q3"></td>
+    </tr>
+</table>
+
+<button class="btn" type="submit">送出表單</button>
+
+</form>
+
+</body>
+</html>
