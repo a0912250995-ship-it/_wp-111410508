@@ -1,0 +1,52 @@
+<% if (user) { %>
+  <div class="composer">
+    <div class="composer-avatar" style="background: <%= user.avatar_color || '#1d9bf0' %>">
+      <%= user.username.charAt(0).toUpperCase() %>
+    </div>
+    <form class="composer-form" action="/posts" method="post">
+      <textarea name="content" placeholder="What's on your mind?" required></textarea>
+      <div class="composer-footer">
+        <button type="submit">Post</button>
+      </div>
+    </form>
+  </div>
+<% } else { %>
+  <div class="empty-state">
+    <div class="empty-icon">&#9751;</div>
+    <p>Join Threads to share your thoughts<br>and see what everyone's talking about.</p>
+  </div>
+<% } %>
+
+<% if (posts.length === 0) { %>
+  <div class="empty-state">
+    <p>No posts yet. Be the first to share something!</p>
+  </div>
+<% } else { %>
+  <% posts.forEach(post => { %>
+    <div class="thread">
+      <a href="/posts/<%= post.id %>" class="thread-avatar" style="background: <%= post.avatar_color %>">
+        <%= post.username.charAt(0).toUpperCase() %>
+      </a>
+      <div class="thread-body">
+        <div class="thread-header">
+          <a href="/posts/<%= post.id %>" class="thread-username"><%= post.username %></a>
+          <span class="thread-time"><%= post.created_at %></span>
+        </div>
+        <div class="thread-content"><%= post.content %></div>
+        <div class="thread-actions">
+          <form action="/posts/<%= post.id %>/like" method="post">
+            <button type="submit" class="action-btn <%= liked[post.id] ? 'liked' : '' %>">
+              <% if (liked[post.id]) { %>❤️<% } else { %>🤍<% } %>
+              <span class="action-count"><%= post.like_count %></span>
+            </button>
+          </form>
+          <% if (user && post.user_id === user.id) { %>
+            <form action="/posts/<%= post.id %>/delete" method="post" onsubmit="return confirm('Delete this post?')">
+              <button type="submit" class="action-btn delete-btn">🗑️</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+<% } %>

@@ -1,0 +1,14 @@
+{
+  "name": "threads-blog3",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-session": "^1.19.0",
+    "sql.js": "^1.11.0"
+  }
+}

@@ -1,0 +1,50 @@
+<% let page = 'profile'; %>
+
+<div class="profile-header">
+  <div class="profile-avatar" style="background: <%= user.avatar_color %>">
+    <%= user.username.charAt(0).toUpperCase() %>
+  </div>
+  <div class="profile-info">
+    <h2><%= user.username %></h2>
+    <p class="post-count"><%= posts.length %> post<%= posts.length !== 1 ? 's' : '' %></p>
+  </div>
+</div>
+
+<div class="profile-tabs">
+  <a href="/profile" class="active">Threads</a>
+</div>
+
+<% if (posts.length === 0) { %>
+  <div class="empty-state">
+    <div class="empty-icon">&#128221;</div>
+    <p>No threads yet. Start a conversation!</p>
+  </div>
+<% } else { %>
+  <% posts.forEach(post => { %>
+    <div class="thread">
+      <a href="/posts/<%= post.id %>" class="thread-avatar" style="background: <%= post.avatar_color %>">
+        <%= post.username.charAt(0).toUpperCase() %>
+      </a>
+      <div class="thread-body">
+        <div class="thread-header">
+          <a href="/posts/<%= post.id %>" class="thread-username"><%= post.username %></a>
+          <span class="thread-time"><%= post.created_at %></span>
+        </div>
+        <div class="thread-content"><%= post.content %></div>
+        <div class="thread-actions">
+          <form action="/posts/<%= post.id %>/like" method="post">
+            <button type="submit" class="action-btn <%= liked[post.id] ? 'liked' : '' %>">
+              <% if (liked[post.id]) { %>❤️<% } else { %>🤍<% } %>
+              <span class="action-count"><%= post.like_count %></span>
+            </button>
+          </form>
+          <% if (user && post.user_id === user.id) { %>
+            <form action="/posts/<%= post.id %>/delete" method="post" onsubmit="return confirm('Delete this post?')">
+              <button type="submit" class="action-btn delete-btn">🗑️</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+<% } %>

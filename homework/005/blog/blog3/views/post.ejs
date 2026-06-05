@@ -1,0 +1,28 @@
+<div class="post-detail">
+  <a href="/" class="back-link">&larr; Back</a>
+  <div class="thread">
+    <div class="thread-avatar" style="background: <%= post.avatar_color %>">
+      <%= post.username.charAt(0).toUpperCase() %>
+    </div>
+    <div class="thread-body">
+      <div class="thread-header">
+        <span class="thread-username"><%= post.username %></span>
+      </div>
+      <div class="thread-content"><%= post.content %></div>
+      <div class="thread-time"><%= post.created_at %></div>
+      <div class="thread-actions">
+        <form action="/posts/<%= post.id %>/like" method="post">
+          <button type="submit" class="action-btn <%= liked ? 'liked' : '' %>">
+            <% if (liked) { %>❤️<% } else { %>🤍<% } %>
+            <span class="action-count"><%= post.like_count %></span>
+          </button>
+        </form>
+        <% if (user && post.user_id === user.id) { %>
+          <form action="/posts/<%= post.id %>/delete" method="post" onsubmit="return confirm('Delete this post?')">
+            <button type="submit" class="action-btn delete-btn">🗑️</button>
+          </form>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
