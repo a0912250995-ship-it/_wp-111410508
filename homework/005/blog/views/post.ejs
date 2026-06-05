@@ -1,0 +1,10 @@
+<h1><%= post.title %></h1>
+<p class="meta">Created: <%= post.created_at %> | Updated: <%= post.updated_at %></p>
+<div class="content"><%= post.content %></div>
+<div class="actions">
+  <a href="/posts/<%= post.id %>/edit">Edit</a>
+  <form action="/posts/<%= post.id %>/delete" method="post" style="display:inline">
+    <button type="submit" onclick="return confirm('Delete this post?')">Delete</button>
+  </form>
+  <a href="/">Back</a>
+</div>

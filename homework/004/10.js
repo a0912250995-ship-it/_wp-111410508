@@ -11,7 +11,7 @@ function calculateTotal(cart) {
         let itemTotal = cart[i].price * cart[i].quantity;
         total += itemTotal;
     }
-    return total;
+    return total;n
 }
 
 console.log("購物車總金額為：" + calculateTotal(cartItems) + " 元");
