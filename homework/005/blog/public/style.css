@@ -25,6 +25,16 @@ nav a:hover {
   text-decoration: underline;
 }
 
+.nav-spacer {
+  flex: 1;
+}
+
+.user-info {
+  color: #555;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
 h1 { font-size: 1.8em; }
 
 .post-list { list-style: none; padding: 0; }
@@ -57,7 +67,7 @@ h1 { font-size: 1.8em; }
 
 form div { margin-bottom: 16px; }
 label { display: block; font-weight: 600; margin-bottom: 4px; }
-input[type="text"], textarea {
+input[type="text"], input[type="password"], textarea {
   width: 100%;
   padding: 8px;
   font-size: 1em;
