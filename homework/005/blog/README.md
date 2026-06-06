@@ -29,7 +29,7 @@
 | **資料表** | posts, users | — | posts, users, likes |
 | **文章欄位** | title + content | — | content 純內容 |
 | **使用者認證** | ✅ (scrypt 密碼雜湊、session) | — | ✅ (scrypt 密碼雜湊、session) |
-| **CRUD 防護** | ❌ 未套用 requireAuth | — | ✅ 建立/刪除需登入，刪除檢查擁有權 |
+| **CRUD 防護** | ✅ 已套用 requireAuth | — | ✅ 建立/刪除需登入，刪除檢查擁有權 |
 | **編輯文章** | ✅ | — | ❌ |
 | **按讚系統** | ❌ | — | ✅ 切換式讚/收回 |
 | **個人頁面** | ❌ | — | ✅ /profile 顯示使用者自己的貼文 |
@@ -56,6 +56,6 @@ node blog3/app.js    # http://localhost:3002
 
 ## 演進摘要
 
-1. **Blog 1** (`simple-blog`)：最基本的 CRUD 部落格，目前已整合 Blog 2 的註冊/登入/登出功能，密碼以 scrypt 鹽值雜湊儲存，但 CRUD 路由未套用 `requireAuth` 中介層，認證僅為半套。
+1. **Blog 1** (`simple-blog`)：最基本的 CRUD 部落格，目前已整合 Blog 2 的註冊/登入/登出功能，密碼以 scrypt 鹽值雜湊儲存，且 CRUD 路由已全數套用 `requireAuth` 中介層。
 2. **Blog 2** (`simple-blog2`)：已整合進 Blog 1，無需獨立執行。
 3. **Blog 3** (`threads-blog3`)：轉變為 Threads/X 風格微部落格，捨棄標題與編輯功能，加入按讚切換、擁有權檢查、個人頁面、色彩頭像、底部導覽列與完整的深色主題，是三個專案中功能最完整者。

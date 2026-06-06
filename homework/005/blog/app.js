@@ -140,7 +140,7 @@ app.get('/logout', (req, res) => {
   });
 });
 
-app.get('/posts/new', (req, res) => {
+app.get('/posts/new', requireAuth, (req, res) => {
   res.render('create', { title: 'New Post' });
 });
 
@@ -157,7 +157,7 @@ app.get('/posts/:id', (req, res) => {
   }
 });
 
-app.post('/posts', (req, res) => {
+app.post('/posts', requireAuth, (req, res) => {
   const { title, content } = req.body;
   if (!title || !content) {
     return res.status(400).send('Title and content are required');
@@ -171,7 +171,7 @@ app.post('/posts', (req, res) => {
   res.redirect(`/posts/${id}`);
 });
 
-app.get('/posts/:id/edit', (req, res) => {
+app.get('/posts/:id/edit', requireAuth, (req, res) => {
   const stmt = db.prepare('SELECT * FROM posts WHERE id = ?');
   stmt.bind([Number(req.params.id)]);
   if (stmt.step()) {
@@ -184,7 +184,7 @@ app.get('/posts/:id/edit', (req, res) => {
   }
 });
 
-app.post('/posts/:id', (req, res) => {
+app.post('/posts/:id', requireAuth, (req, res) => {
   const { title, content } = req.body;
   if (!title || !content) {
     return res.status(400).send('Title and content are required');
@@ -194,7 +194,7 @@ app.post('/posts/:id', (req, res) => {
   res.redirect(`/posts/${req.params.id}`);
 });
 
-app.post('/posts/:id/delete', (req, res) => {
+app.post('/posts/:id/delete', requireAuth, (req, res) => {
   db.run('DELETE FROM posts WHERE id = ?', [Number(req.params.id)]);
   saveDb();
   res.redirect('/');
