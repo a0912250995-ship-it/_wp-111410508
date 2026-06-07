@@ -182,6 +182,30 @@ node blog3/app.js    # Blog 3 → http://localhost:3002
 
 ---
 
+## 期中專案 — Reaction Click Game
+
+**路徑**：`期中/final-game/`
+
+一個**反應速度點擊遊戲**結合**公開排名系統**的網頁應用。玩家在 30 秒內點擊畫面上的彩色圓圈累積分數，支援 Combo 連擊獎勵與粒子特效，分數自動上傳至伺服器並顯示於排行榜。採用 Express.js + SQLite + Canvas API 實作。
+
+**功能**：
+- Canvas 遊戲引擎（隨機生成圓圈、漸淡消失、碰撞檢測）
+- Combo 連擊系統（連續點擊加分）
+- 使用者註冊 / 登入（scrypt 密碼雜湊）
+- 即時排行榜（Top 10 + 完整排行榜頁面）
+- 深色主題 UI
+
+**啟動**：
+```bash
+cd 期中/final-game
+npm install
+node app.js  # http://localhost:3003
+```
+
+**完整報告**：`期中/final-game/README.md`
+
+---
+
 ## 技術棧總覽
 
 | 技術 | 使用於 |
@@ -209,21 +233,11 @@ node blog3/app.js    # Blog 3 → http://localhost:3002
 | 005 | ~40+ | 3 個 Express 部落格專案 (JS、EJS、CSS、JSON) |
 | 006 | 11 | 10 個 JS 練習 + README |
 | 007 | 11 | 10 個 JS 練習 + README |
-| **總計** | **~77+** | 不包含 node_modules |
+| 期中/final-game | 12 | Reaction Click Game 遊戲 + 排名系統 |
+| **總計** | **~89+** | 不包含 node_modules |
 
 ---
 
 ## AI 輔助工具使用聲明
 
-本作業在開發與撰寫過程中，使用了以下 AI 工具輔助完成：
-
-- **ChatGPT** — 用於程式碼除錯、語法諮詢與概念釐清
-
-### 相關對話記錄連結
-
-| 說明 | 連結 |
-|------|------|
-| 對話記錄 1 | https://chatgpt.com/share/6a25b6cf-5f94-83a8-b752-b1ade74deb18 |
-| 對話記錄 2 | https://chatgpt.com/c/6a217445-2000-83ab-bc73-57d38878a382 |
-| 對話記錄 3 | https://chatgpt.com/c/69badd3b-c5fc-83a5-9c80-5ff9226e6a2d |
-| 對話記錄 4 | https://chatgpt.com/c/69badd92-c0ac-8321-b022-b4ecb4079597 |
+本作業在開發與撰寫過程中，使用了 opencode (AI 程式設計助手) 作為輔助工具，用於程式碼生成、除錯、語法諮詢與概念釐清。
