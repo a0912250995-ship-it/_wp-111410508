@@ -1,14 +1,17 @@
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
 const crypto = require('crypto');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
-const initSqlJs = require('sql.js');
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 3003;
-const DB_PATH = path.join(__dirname, 'game.db');
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -27,39 +30,24 @@ app.use((req, res, next) => {
   next();
 });
 
-let db;
-
-function saveDb() {
-  fs.writeFileSync(DB_PATH, Buffer.from(db.export()));
-}
-
 async function initDb() {
-  const SQL = await initSqlJs();
-  if (fs.existsSync(DB_PATH)) {
-    const buffer = fs.readFileSync(DB_PATH);
-    db = new SQL.Database(buffer);
-  } else {
-    db = new SQL.Database();
-  }
-  db.run(`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id SERIAL PRIMARY KEY,
       username TEXT UNIQUE NOT NULL,
       password_hash TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
-  db.run(`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS scores (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER NOT NULL,
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id),
       username TEXT NOT NULL,
       score INTEGER NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users(id)
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
-  saveDb();
 }
 
 function hashPassword(password) {
@@ -78,60 +66,40 @@ function requireAuth(req, res, next) {
   next();
 }
 
-app.get('/', (req, res) => {
-  const stmt = db.prepare('SELECT * FROM scores ORDER BY score DESC, created_at ASC LIMIT 10');
-  const leaderboard = [];
-  while (stmt.step()) {
-    leaderboard.push(stmt.getAsObject());
-  }
-  stmt.free();
-  res.render('index', { leaderboard, title: 'Reaction Click Game' });
+app.get('/', async (req, res) => {
+  const result = await pool.query('SELECT * FROM scores ORDER BY score DESC, created_at ASC LIMIT 10');
+  res.render('index', { leaderboard: result.rows, title: 'Reaction Click Game' });
 });
 
-app.get('/leaderboard', (req, res) => {
-  const stmt = db.prepare('SELECT * FROM scores ORDER BY score DESC, created_at ASC LIMIT 50');
-  const leaderboard = [];
-  while (stmt.step()) {
-    leaderboard.push(stmt.getAsObject());
-  }
-  stmt.free();
-  res.render('leaderboard', { leaderboard, title: 'Leaderboard' });
+app.get('/leaderboard', async (req, res) => {
+  const result = await pool.query('SELECT * FROM scores ORDER BY score DESC, created_at ASC LIMIT 50');
+  res.render('leaderboard', { leaderboard: result.rows, title: 'Leaderboard' });
 });
 
-app.post('/api/score', requireAuth, (req, res) => {
+app.post('/api/score', requireAuth, async (req, res) => {
   const { score } = req.body;
   if (typeof score !== 'number' || score < 0 || score > 10000) {
     return res.status(400).json({ error: 'Invalid score' });
   }
-  db.run('INSERT INTO scores (user_id, username, score) VALUES (?, ?, ?)',
-    [req.session.user.id, req.session.user.username, Math.floor(score)]);
-  saveDb();
+  await pool.query(
+    'INSERT INTO scores (user_id, username, score) VALUES ($1, $2, $3)',
+    [req.session.user.id, req.session.user.username, Math.floor(score)]
+  );
 
-  const stmt = db.prepare('SELECT * FROM scores ORDER BY score DESC, created_at ASC LIMIT 10');
-  const leaderboard = [];
-  while (stmt.step()) {
-    leaderboard.push(stmt.getAsObject());
-  }
-  stmt.free();
-
-  res.json({ success: true, leaderboard });
+  const result = await pool.query('SELECT * FROM scores ORDER BY score DESC, created_at ASC LIMIT 10');
+  res.json({ success: true, leaderboard: result.rows });
 });
 
-app.get('/api/leaderboard', (req, res) => {
-  const stmt = db.prepare('SELECT * FROM scores ORDER BY score DESC, created_at ASC LIMIT 10');
-  const leaderboard = [];
-  while (stmt.step()) {
-    leaderboard.push(stmt.getAsObject());
-  }
-  stmt.free();
-  res.json(leaderboard);
+app.get('/api/leaderboard', async (req, res) => {
+  const result = await pool.query('SELECT * FROM scores ORDER BY score DESC, created_at ASC LIMIT 10');
+  res.json(result.rows);
 });
 
 app.get('/register', (req, res) => {
   res.render('register', { title: 'Register' });
 });
 
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
   const { username, password, confirmPassword } = req.body;
   if (!username || !password || !confirmPassword) {
     return res.status(400).send('All fields are required');
@@ -142,15 +110,14 @@ app.post('/register', (req, res) => {
   if (username.length < 2 || username.length > 20) {
     return res.status(400).send('Username must be 2-20 characters');
   }
-  const stmt = db.prepare('SELECT id FROM users WHERE username = ?');
-  stmt.bind([username]);
-  if (stmt.step()) {
-    stmt.free();
+  const existing = await pool.query('SELECT id FROM users WHERE username = $1', [username]);
+  if (existing.rows.length > 0) {
     return res.status(400).send('Username already exists');
   }
-  stmt.free();
-  db.run('INSERT INTO users (username, password_hash) VALUES (?, ?)', [username, hashPassword(password)]);
-  saveDb();
+  await pool.query(
+    'INSERT INTO users (username, password_hash) VALUES ($1, $2)',
+    [username, hashPassword(password)]
+  );
   res.redirect('/login');
 });
 
@@ -158,22 +125,18 @@ app.get('/login', (req, res) => {
   res.render('login', { title: 'Login' });
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
     return res.status(400).send('Username and password are required');
   }
-  const stmt = db.prepare('SELECT * FROM users WHERE username = ?');
-  stmt.bind([username]);
-  if (stmt.step()) {
-    const user = stmt.getAsObject();
-    stmt.free();
+  const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+  if (result.rows.length > 0) {
+    const user = result.rows[0];
     if (verifyPassword(password, user.password_hash)) {
       req.session.user = { id: user.id, username: user.username };
       return res.redirect('/');
     }
-  } else {
-    stmt.free();
   }
   res.status(401).send('Invalid username or password');
 });
