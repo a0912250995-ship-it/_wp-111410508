@@ -7,7 +7,7 @@ const expressLayouts = require('express-ejs-layouts');
 const initSqlJs = require('sql.js');
 
 const app = express();
-const PORT = 3003;
+const PORT = process.env.PORT || 3003;
 const DB_PATH = path.join(__dirname, 'game.db');
 
 app.set('view engine', 'ejs');
@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: 'reaction-game-secret-change-in-production',
+  secret: process.env.SESSION_SECRET || 'reaction-game-secret-change-in-production',
   resave: false,
   saveUninitialized: false
 }));
