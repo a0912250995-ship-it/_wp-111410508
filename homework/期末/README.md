@@ -240,4 +240,16 @@ node app.js  # http://localhost:3003
 
 ## AI 輔助工具使用聲明
 
-本作業在開發與撰寫過程中，使用了 opencode (AI 程式設計助手) 作為輔助工具，用於程式碼生成、除錯、語法諮詢與概念釐清。
+本作業在開發與撰寫過程中，使用了以下 AI 工具輔助完成：
+
+- **ChatGPT** — 用於程式碼除錯、語法諮詢與概念釐清
+- **opencode** — 用於程式碼生成、除錯、語法諮詢與概念釐清
+
+### 相關對話記錄連結
+
+| 說明 | 連結 |
+|------|------|
+| 對話記錄 1 | https://chatgpt.com/share/6a25b6cf-5f94-83a8-b752-b1ade74deb18 |
+| 對話記錄 2 | https://chatgpt.com/c/6a217445-2000-83ab-bc73-57d38878a382 |
+| 對話記錄 3 | https://chatgpt.com/c/69badd3b-c5fc-83a5-9c80-5ff9226e6a2d |
+| 對話記錄 4 | https://chatgpt.com/c/69badd92-c0ac-8321-b022-b4ecb4079597 |
