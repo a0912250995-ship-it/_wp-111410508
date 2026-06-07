@@ -1,0 +1,59 @@
+<h1>Reaction Click Game</h1>
+<p class="subtitle">Click the circles before they disappear! Fastest clicks win.</p>
+
+<div class="how-to-play">
+  <h3>How to Play</h3>
+  <ul>
+    <li>Click on circles as they appear to earn points</li>
+    <li>Consecutive hits build a combo multiplier</li>
+    <li>Game lasts 30 seconds — highest score wins!</li>
+    <li><a href="/register" style="color:#4ECDC4;">Register</a> to save your scores to the leaderboard</li>
+  </ul>
+</div>
+
+<div class="game-wrapper">
+  <canvas id="gameCanvas"></canvas>
+</div>
+
+<div class="game-controls">
+  <button class="btn btn-primary" id="startBtn" onclick="startGame()">Start Game</button>
+</div>
+
+<div class="game-over-panel" id="gameOverPanel">
+  <h2>Game Over!</h2>
+  <div class="final-score" id="finalScore">0</div>
+  <p style="color:#888;margin-top:6px;font-size:0.9em;">
+    <% if (user) { %>
+      Score submitted to leaderboard!
+    <% } else { %>
+      <a href="/login" style="color:#4ECDC4;">Login</a> to save your score
+    <% } %>
+  </p>
+</div>
+
+<div class="leaderboard-section">
+  <h2>🏆 Leaderboard</h2>
+  <ul class="leaderboard-list" id="leaderboardList">
+    <% leaderboard.forEach((entry, i) => { %>
+      <li>
+        <span class="rank"><%= i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) %></span>
+        <span class="username"><%= entry.username %></span>
+        <span class="score"><%= entry.score %></span>
+      </li>
+    <% }) %>
+    <% if (leaderboard.length === 0) { %>
+      <li style="text-align:center;color:#666;justify-content:center;">No scores yet. Be the first!</li>
+    <% } %>
+  </ul>
+  <div style="text-align:center;margin-top:12px;">
+    <a href="/leaderboard" class="btn btn-secondary">View Full Leaderboard</a>
+  </div>
+</div>
+
+<div id="userData" data-logged-in="<%= user ? 'true' : 'false' %>" style="display:none;"></div>
+
+<audio id="popSound" preload="auto">
+  <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACAf39/f4B/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f4B/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f4B/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f4B/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f3+AgH9/f4B/f3+AgH9/f3+AgH9/f3+AgH9/f38=" type="audio/wav">
+</audio>
+
+<script src="/game.js"></script>

@@ -1,0 +1,31 @@
+<h1>🏆 Full Leaderboard</h1>
+
+<div class="full-leaderboard">
+  <% if (leaderboard.length === 0) { %>
+    <p style="text-align:center;color:#666;">No scores yet. Be the first to play!</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Player</th>
+          <th>Score</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% leaderboard.forEach((entry, i) => { %>
+          <tr>
+            <td><%= i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '#' + (i + 1) %></td>
+            <td><strong><%= entry.username %></strong></td>
+            <td style="color:#4ECDC4;font-weight:700;"><%= entry.score %></td>
+            <td style="color:#666;font-size:0.85em;"><%= entry.created_at %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+  <div style="text-align:center;margin-top:20px;">
+    <a href="/" class="btn btn-primary">Play Game</a>
+  </div>
+</div>
