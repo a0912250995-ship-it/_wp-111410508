@@ -133,12 +133,4 @@ node app.js  # http://localhost:3003
 
 ## AI 輔助工具使用聲明
 
-本專案在開發過程中使用了以下 AI 工具輔助：
-
-- **ChatGPT** — 用於除錯、語法諮詢與概念釐清
-
-### 相關對話記錄
-- https://chatgpt.com/share/6a25b6cf-5f94-83a8-b752-b1ade74deb18
-- https://chatgpt.com/c/6a217445-2000-83ab-bc73-57d38878a382
-- https://chatgpt.com/c/69badd3b-c5fc-83a5-9c80-5ff9226e6a2d
-- https://chatgpt.com/c/69badd92-c0ac-8321-b022-b4ecb4079597
+本專案在開發過程中使用了 ChatGPT 作為輔助工具，用於除錯、語法諮詢與概念釐清。
