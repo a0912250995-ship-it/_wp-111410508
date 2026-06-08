@@ -256,14 +256,24 @@ function updateLeaderboard(leaderboard) {
   });
 }
 
-canvas.addEventListener('click', (e) => {
+function handleCanvasClick(e) {
   if (!gameRunning) return;
 
   const rect = canvas.getBoundingClientRect();
   const scaleX = canvas.width / rect.width;
   const scaleY = canvas.height / rect.height;
-  const clickX = (e.clientX - rect.left) * scaleX;
-  const clickY = (e.clientY - rect.top) * scaleY;
+
+  let clientX, clientY;
+  if (e.touches) {
+    clientX = e.touches[0].clientX;
+    clientY = e.touches[0].clientY;
+  } else {
+    clientX = e.clientX;
+    clientY = e.clientY;
+  }
+
+  const clickX = (clientX - rect.left) * scaleX;
+  const clickY = (clientY - rect.top) * scaleY;
 
   for (let i = circles.length - 1; i >= 0; i--) {
     const c = circles[i];
@@ -289,6 +299,12 @@ canvas.addEventListener('click', (e) => {
   }
 
   combo = 0;
-});
+}
+
+canvas.addEventListener('click', handleCanvasClick);
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  handleCanvasClick(e);
+}, { passive: false });
 
 window.startGame = startGame;
